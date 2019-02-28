@@ -45,13 +45,13 @@
    
    (:action moveItemFromPalletteToShipment
       :parameters (?l - location ?s - shipment ?si - saleitem ?p - pallette ?o - order)
-      :precondition (and (packing-at ?s ?l) (at ?p ?l) (contains ?p ?si) (started ?s) (not (complete ?s)) (orders ?o ?si) (ships ?s ?o))
+      :precondition (and (packing-location ?l) (packing-at ?s ?l) (at ?p ?l) (contains ?p ?si) (started ?s) (not (complete ?s)) (orders ?o ?si) (ships ?s ?o))
       :effect (and (not (contains ?p ?si)) (includes ?s ?si))
    )
    
    (:action completeShipment
       :parameters (?s - shipment ?o - order ?l - location)
-      :precondition (and (not (complete ?s)) (started ?s) (packing-at ?s ?l) (ships ?s ?o))
-      :effect (and (complete ?s) (available ?l))
+      :precondition (and (not (complete ?s)) (started ?s) (packing-at ?s ?l) (packing-location ?l) (ships ?s ?o))
+      :effect (and (complete ?s) (available ?l) (not (packing-at ?s ?l)))
    )
 )
